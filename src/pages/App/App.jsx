@@ -6,6 +6,7 @@ import AuthPage from '../AuthPage/AuthPage';
 import NavBar from '../../components/NavBar/NavBar';
 import CategoriesPage from '../CategoriesPage/CategoriesPage';
 import ExpensesPage from '../ExpensesPage/ExpensesPage';
+import { Navigate } from 'react-router-dom';
 
 export default function App() {
   const [user, setUser] = useState(getUser());
@@ -16,6 +17,7 @@ export default function App() {
           <>
             <NavBar user={user} setUser={setUser} />
             <Routes>
+              <Route path='/' element={<Navigate to="/all-expenses" replace />} />
               <Route path='/categories' element={<CategoriesPage />} />
               <Route path='/expenses' element={<ExpensesPage />} />
             </Routes>

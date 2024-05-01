@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchExpenses, addExpense, deleteExpense, updateExpense } from '../../utilities/expense-service';
+import { categories } from '../../data';
+import { subCategories } from '../../data';
+import { fetchCategories } from '../../utilities/category-service';
+import { fetchSubCategories } from '../../utilities/subCategory-service';
 
 export default function ExpensesPage() {
     const [expenses, setExpenses] = useState([]);
+    const [categories, setCategories] = useState([]); // State for categories
+    const [subCategories, setSubCategories] = useState([]);
     const [newExpense, setNewExpense] = useState({
         category: '',
         subCategory: '',
@@ -11,28 +17,25 @@ export default function ExpensesPage() {
         date: ''
     });
 
-    const categories = [
-        "Travel", "Clothing", "Essentials", "Daily", "Utilities",
-        "Entertainment", "Education", "Health", "Gifts and Donations", "Miscellaneous"
-    ];
-
-    const subCategories = {
-        Travel: ["Flights", "Lodging", "Food", "Transport", "Entertainment", "Shopping"],
-        Clothing: ["Casual Wear", "Formal Wear", "Sportswear", "Accessories", "Footwear"],
-        Essentials: ["Groceries", "Household Items", "Personal Care", "Health and Wellness(meds, supplements)"],
-        Daily: ["Dining Out", "Coffee and Snacks", "Public Transport", "Parking Fees", "Gas"],
-        Utilities: ["Electricity", "Water", "Internet", "Moile Phone", "Cable TV"],
-        Entertainment: ["Movies and Shows", "Books and Magazine", "Games", "Events(concerts, sports)", "Night Out"],
-        Education: ["Tuition Fees", "School Supplies", "Online Courses", "Books"],
-        Health: ["Doctor Visits", "Medications", "Gym Membership", "Therapy"],
-        Gifts: ["Charitable Donations", "Gifts for Others", "Parties and Celebrations"],
-        Miscellaneous: ["Pet Expenses", "Home Repairs", "Furniture"],
-    }
-
-
     useEffect(() => {
         loadExpenses();
+        loadCategories(); // Add this to also load categories on component mount
+        loadSubCategories();
     }, []);
+
+    const loadCategories = async () => {
+        try {
+            const data = await fetchCategories();
+            setCategories(data);
+        } catch (error) {
+            console.error('Failed to fetch categories:', error);
+        }
+    };
+
+    const loadSubCategories = async () => {
+        const data = await fetchSubCategories();
+        setSubCategories(data);
+    };
 
     const loadExpenses = async () => {
         const data = await fetchExpenses();
@@ -41,10 +44,10 @@ export default function ExpensesPage() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        setNewExpense(prev => ({
-            ...prev,
+        setNewExpense(prevState => ({
+            ...prevState,
             [name]: value,
-            ...(name === 'category' && { subCategory: '' })  // Reset subCategory when category changes
+            ...(name === 'category' && { subCategory: '' })
         }));
     };
 
@@ -76,8 +79,8 @@ export default function ExpensesPage() {
                     required
                 >
                     <option value="">Select a Category</option>
-                    {Object.keys(subCategories).map((category, index) => (
-                        <option key={index} value={category}>{category}</option>
+                    {categories.map((category) => (
+                        <option key={category._id} value={category._id}>{category.name}</option>
                     ))}
                 </select>
 
@@ -89,9 +92,11 @@ export default function ExpensesPage() {
                         required
                     >
                         <option value="">Select a Subcategory</option>
-                        {subCategories[newExpense.category].map((subCategory, index) => (
-                            <option key={index} value={subCategory}>{subCategory}</option>
-                        ))}
+                        {subCategories
+                            .filter(sc => sc.category === newExpense.category)
+                            .map((sc) => (
+                                <option key={sc._id} value={sc._id}>{sc.name}</option>
+                            ))}
                     </select>
                 )}
 

@@ -9,6 +9,7 @@ require('./config/database');
 
 const app = express();
 
+
 app.use(logger('dev'));
 app.use(express.json());
 
@@ -25,6 +26,10 @@ const port = process.env.PORT || 3001;
 
 // Put API routes here, before the "catch all" route
 app.use('/api/users', require('./routes/api/users'));
+app.use('/api/expenses', require('./routes/api/expenses'));
+app.use('/api/categories', require('./routes/api/categories'));
+app.use('/api/subcategories', require('./routes/api/subcategories'));
+
 
 // The following "catch all" route (note the *) is necessary
 // to return the index.html on all non-AJAX/API requests
