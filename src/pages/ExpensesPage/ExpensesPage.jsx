@@ -9,9 +9,10 @@ export default function ExpensesPage() {
         subCategory: '',
         amount: '',
         description: '',
-        date: ''
+        date: '',
+        isEditing: false,
+        editingId: null
     });
-
 
     useEffect(() => {
         loadExpenses();
@@ -34,12 +35,15 @@ export default function ExpensesPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            console.log('Form submitted', newExpense);
-            await addExpense(newExpense);
+            if (newExpense.isEditing) {
+                await updateExpense(newExpense.editingId, newExpense);
+            } else {
+                await addExpense(newExpense);
+            }
             loadExpenses();
-            setNewExpense({ category: '', subCategory: '', amount: '', description: '', date: '' }); // Reset form
+            setNewExpense({ category: '', subCategory: '', amount: '', description: '', date: '', isEditing: false, editingId: null }); // Reset form
         } catch (error) {
-            console.error('Failed to add expense:', error.message)
+            console.error('Failed to add/update expense:', error.message)
         }
     };
 
@@ -48,9 +52,16 @@ export default function ExpensesPage() {
         loadExpenses();
     };
 
-    const handleUpdate = async (id, updatedFields) => {
-        await updateExpense(id, updatedFields);
-        loadExpenses();
+    const handleEdit = (expense) => {
+        setNewExpense({
+            category: expense.category,
+            subCategory: expense.subCategory,
+            amount: expense.amount,
+            description: expense.description,
+            date: expense.date.split('T')[0], // Adjust date format for input[type="date"]
+            isEditing: true,
+            editingId: expense._id
+        });
     };
 
     return (
@@ -105,14 +116,16 @@ export default function ExpensesPage() {
                     onChange={handleChange}
                     required
                 />
-                <button type="submit">Add Expense</button>
+                <button type="submit">{newExpense.isEditing ? 'Update Expense' : 'Add Expense'}</button>
             </form>
 
             {expenses.map(expense => (
                 <div key={expense._id}>
-                    <div>{expense.category} - {expense.subCategory}: ${expense.amount} on {new Date(expense.date).toLocaleDateString()}</div>
-                    <button onClick={() => handleDelete(expense._id)}>Delete</button>
-                    <button onClick={() => handleUpdate(expense._id, { amount: 123 })}>Update Amount</button>
+                    <div>
+                        <strong>{expense.category} :</strong> {expense.subCategory} - {expense.description} <strong>${expense.amount}</strong> on {new Date(expense.date).toLocaleDateString()}
+                        <button onClick={() => handleDelete(expense._id)}>Delete</button>
+                        <button onClick={() => handleEdit(expense)}>Edit</button>
+                    </div>
                 </div>
             ))}
         </div>

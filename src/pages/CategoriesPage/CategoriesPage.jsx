@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchCategories, addCategory, deleteCategory, updateCategory } from '../../utilities/category-service';
 
 export default function CategoriesPage() {
