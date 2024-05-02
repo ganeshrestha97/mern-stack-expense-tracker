@@ -3,6 +3,8 @@ import { fetchCategories, addCategory, deleteCategory, updateCategory } from '..
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [editStates, setEditStates] = useState({});
 
   useEffect(() => {
     loadCategories();
@@ -13,9 +15,10 @@ export default function CategoriesPage() {
     setCategories(data);
   };
 
-  const handleAddCategory = async (categoryName) => {
-    await addCategory({ name: categoryName });
+  const handleAddCategory = async () => {
+    await addCategory({ name: newCategoryName });
     loadCategories();
+    setNewCategoryName(''); // Reset input field
   };
 
   const handleDeleteCategory = async (categoryId) => {
@@ -23,22 +26,40 @@ export default function CategoriesPage() {
     loadCategories();
   };
 
-  const handleUpdateCategory = async (categoryId, newName) => {
+  const handleUpdateCategory = async (categoryId) => {
+    const newName = editStates[categoryId];
     await updateCategory(categoryId, { name: newName });
     loadCategories();
+    setEditStates(prev => ({ ...prev, [categoryId]: undefined })); // Clear edit state
   };
 
   return (
     <div>
       <h1>Categories</h1>
+      <input
+        value={newCategoryName}
+        onChange={e => setNewCategoryName(e.target.value)}
+        placeholder="Enter new category name"
+      />
+      <button onClick={handleAddCategory}>Add Category</button>
       {categories.map(category => (
         <div key={category._id}>
-          {category.name}
+          {editStates[category._id] ? (
+            <input
+              value={editStates[category._id]}
+              onChange={e => setEditStates(prev => ({ ...prev, [category._id]: e.target.value }))}
+            />
+          ) : (
+            <span>{category.name}</span>
+          )}
           <button onClick={() => handleDeleteCategory(category._id)}>Delete</button>
-          <button onClick={() => handleUpdateCategory(category._id, 'New Name')}>Update</button>
+          {editStates[category._id] ? (
+            <button onClick={() => handleUpdateCategory(category._id)}>Save</button>
+          ) : (
+            <button onClick={() => setEditStates(prev => ({ ...prev, [category._id]: category.name }))}>Edit</button>
+          )}
         </div>
       ))}
-      <button onClick={() => handleAddCategory('New Category')}>Add Category</button>
     </div>
   );
 }
