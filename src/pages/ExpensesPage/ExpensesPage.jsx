@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { fetchExpenses, addExpense, deleteExpense, updateExpense } from '../../utilities/expense-service';
 import { subCategories } from '../../data';
+
 
 export default function ExpensesPage() {
     const [expenses, setExpenses] = useState([]);
@@ -14,12 +16,14 @@ export default function ExpensesPage() {
         editingId: null
     });
 
+    const { category } = useParams();
+
     useEffect(() => {
         loadExpenses();
-    }, []);
+    }, [category]);
 
     const loadExpenses = async () => {
-        const data = await fetchExpenses();
+        const data = await fetchExpenses(category);
         setExpenses(data);
     };
 
