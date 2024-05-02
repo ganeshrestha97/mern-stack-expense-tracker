@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchExpenses, addExpense, deleteExpense, updateExpense } from '../../utilities/expense-service';
-import {  subCategories } from '../../data';
+import { subCategories } from '../../data';
 
 export default function ExpensesPage() {
     const [expenses, setExpenses] = useState([]);
@@ -33,9 +33,14 @@ export default function ExpensesPage() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        await addExpense(newExpense);
-        loadExpenses();
-        setNewExpense({ category: '', subCategory: '', amount: '', description: '', date: '' }); // Reset form
+        try {
+            console.log('Form submitted', newExpense);
+            await addExpense(newExpense);
+            loadExpenses();
+            setNewExpense({ category: '', subCategory: '', amount: '', description: '', date: '' }); // Reset form
+        } catch (error) {
+            console.error('Failed to add expense:', error.message)
+        }
     };
 
     const handleDelete = async (id) => {

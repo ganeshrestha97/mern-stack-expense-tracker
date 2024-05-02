@@ -14,7 +14,9 @@ export default function NavBar({ user, setUser }) {
       <br />
       &nbsp;&nbsp;
       <Link to="/expenses">Add Expense</Link>
-      &nbsp; | &nbsp;     
+      &nbsp; | &nbsp; 
+      <Link to="/all-expenses">All Expenses</Link>
+      &nbsp; | &nbsp;    
       <Link to="/categories">Categories</Link>
       &nbsp; | &nbsp;     
       <Link to="" onClick={handleLogOut}>Log Out</Link>
