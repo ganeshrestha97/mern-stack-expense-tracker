@@ -95,7 +95,7 @@ export default function AllExpensesPage() {
                                 value={editFormData.date}
                                 onChange={handleChange}
                             />
-                            <button type="submit">Save</button>
+                            <button type="submit">Update</button>
                             <button type="button" onClick={handleCancel}>Cancel</button>
                         </form>
                     ) : (

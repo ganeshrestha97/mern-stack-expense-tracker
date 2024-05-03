@@ -120,7 +120,7 @@ export default function ExpensesPage() {
                     onChange={handleChange}
                     required
                 />
-                <button type="submit">{newExpense.isEditing ? 'Update Expense' : 'Add Expense'}</button>
+                <button type="submit">{newExpense.isEditing ? 'Update' : 'Add Expense'}</button>
             </form>
 
             {expenses.map(expense => (
