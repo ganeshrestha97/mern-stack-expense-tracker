@@ -7,6 +7,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import CategoriesPage from '../CategoriesPage/CategoriesPage';
 import ExpensesPage from '../ExpensesPage/ExpensesPage';
 import AllExpensesPage from '../AllExpensesPage/AllExpensesPage';
+import CategoryExpensesPage from '../CategoryExpensesPage/CategoryExpensesPage';
 
 
 export default function App() {
@@ -20,9 +21,9 @@ export default function App() {
             <Routes>
               <Route path='/' element={<AllExpensesPage />} />
               <Route path='/categories' element={<CategoriesPage />} />
-              <Route path='/expenses/:category' element={<ExpensesPage />} />  
               <Route path='/expenses' element={<ExpensesPage />} />
               <Route path='/all-expenses' element={<AllExpensesPage />} />
+              <Route path='/expenses/category/:category' element={<CategoryExpensesPage />} />
             </Routes>
           </>
           :

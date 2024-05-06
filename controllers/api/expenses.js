@@ -8,18 +8,23 @@ module.exports = {
 };
 
 async function getAllExpenses(req, res) {
-  const expenses = await Expense.find({ user: req.user._id });
+  const query = { user: req.user._id };
+  if (req.query.category) {
+    query.category = new RegExp(req.query.category, 'i'); 
+  }
+  const expenses = await Expense.find(query);
   res.json(expenses);
 }
 
 async function createExpense(req, res) {
   try {
-      req.body.user = req.user._id; 
-      const expense = await Expense.create(req.body);
-      res.json(expense);
+    req.body.user = req.user._id;
+    req.body.category = req.body.category; 
+    const expense = await Expense.create(req.body);
+    res.json(expense);
   } catch (error) {
-      console.error('Error creating expense:', error);
-      res.status(500).json({ msg: 'Failed to create expense', error: error.message });
+    console.error('Error creating expense:', error);
+    res.status(500).json({ msg: 'Failed to create expense', error: error.message });
   }
 }
 

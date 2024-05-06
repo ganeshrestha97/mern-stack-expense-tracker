@@ -11,14 +11,31 @@ export default function AllExpensesPage() {
         description: '',
         date: ''
     });
+    const [selectedSortOption, setSelectedSortOption] = useState('date');
+    const [selectedOrderOption, setSelectedOrderOption] = useState('asc');
+
+    const sortByDate = (a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return selectedOrderOption === 'asc' ? dateA - dateB : dateB - dateA;
+    };
+
+    const sortByCategory = (a, b) => {
+        const categoryA = a.category.toLowerCase();
+        const categoryB = b.category.toLowerCase();
+        if (categoryA < categoryB) return selectedOrderOption === 'asc' ? -1 : 1;
+        if (categoryA > categoryB) return selectedOrderOption === 'asc' ? 1 : -1;
+        return 0;
+    };
 
     useEffect(() => {
         const loadExpenses = async () => {
             const data = await fetchExpenses();
-            setExpenses(data);
+            const sortedData = data.sort(selectedSortOption === 'date' ? sortByDate : sortByCategory);
+            setExpenses(sortedData);
         };
         loadExpenses();
-    }, []);
+    }, [selectedSortOption, selectedOrderOption]);
 
     const handleDelete = async (expenseId) => {
         await deleteExpense(expenseId);
@@ -59,8 +76,19 @@ export default function AllExpensesPage() {
     };
 
     return (
+
         <div>
             <h1>All Expenses</h1>
+            <div>
+                <select value={selectedSortOption} onChange={(e) => setSelectedSortOption(e.target.value)}>
+                    <option value="date">Sort by Date</option>
+                    <option value="category">Sort by Category</option>
+                </select>
+                <select value={selectedOrderOption} onChange={(e) => setSelectedOrderOption(e.target.value)}>
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+            </div>
             {expenses.map(expense => (
                 <div key={expense._id}>
                     {editExpenseId === expense._id ? (

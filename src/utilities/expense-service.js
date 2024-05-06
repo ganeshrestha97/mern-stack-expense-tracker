@@ -2,8 +2,9 @@ import sendRequest from './send-request';
 
 const BASE_URL = '/api/expenses';
 
-export function fetchExpenses() {
-  return sendRequest(BASE_URL);
+export function fetchExpenses(category = '') {
+  const url = category ? `${BASE_URL}?category=${encodeURIComponent(category)}` : BASE_URL;
+  return sendRequest(url);
 }
 
 export function addExpense(expenseData) {

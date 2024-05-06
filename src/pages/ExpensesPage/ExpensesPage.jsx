@@ -19,6 +19,11 @@ export default function ExpensesPage() {
     const { category } = useParams();
 
     useEffect(() => {
+        const loadExpenses = async () => {
+            const data = await fetchExpenses(category);
+            setExpenses(data);
+        };
+    
         loadExpenses();
     }, [category]);
 

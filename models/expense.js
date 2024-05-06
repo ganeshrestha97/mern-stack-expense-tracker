@@ -9,6 +9,8 @@ const expenseSchema = new Schema({
   date: Date,
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   created_at: { type: Date, default: Date.now }
+}, {
+  timestamps: true
 });
 
 module.exports = mongoose.model('Expense', expenseSchema);
