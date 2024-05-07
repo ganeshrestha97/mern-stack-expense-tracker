@@ -44,15 +44,18 @@ export default function ExpensesPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            const expenseData = { ...newExpense };
+            expenseData.date = new Date(newExpense.date + 'T00:00:00').toISOString(); // Convert date to ISO format
+    
             if (newExpense.isEditing) {
-                await updateExpense(newExpense.editingId, newExpense);
+                await updateExpense(newExpense.editingId, expenseData);
             } else {
-                await addExpense(newExpense);
+                await addExpense(expenseData);
             }
             loadExpenses();
             setNewExpense({ category: '', subCategory: '', amount: '', description: '', date: '', isEditing: false, editingId: null }); // Reset form
         } catch (error) {
-            console.error('Failed to add/update expense:', error.message)
+            console.error('Failed to add/update expense:', error.message);
         }
     };
 
@@ -132,8 +135,8 @@ export default function ExpensesPage() {
                 <div key={expense._id}>
                     <div>
                         <strong>{expense.category} :</strong> {expense.subCategory} - {expense.description} <strong>${expense.amount}</strong> on {new Date(expense.date).toLocaleDateString()}
-                        <button onClick={() => handleDelete(expense._id)}>Delete</button>
                         <button onClick={() => handleEdit(expense)}>Edit</button>
+                        <button onClick={() => handleDelete(expense._id)}>Delete</button>
                     </div>
                 </div>
             ))}

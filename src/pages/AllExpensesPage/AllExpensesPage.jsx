@@ -1,5 +1,37 @@
 import { useState, useEffect } from 'react';
 import { fetchExpenses, deleteExpense, updateExpense } from '../../utilities/expense-service';
+import { subCategories } from '../../data';
+
+
+const groupExpensesByMonth = (expenses) => {
+    const groupedExpenses = {};
+
+    expenses.forEach((expense) => {
+        const date = new Date(expense.date);
+        const month = date.toLocaleString('default', { month: 'long' });
+        const year = date.getFullYear();
+        const monthYear = `${month} ${year}`;
+
+        if (!groupedExpenses[monthYear]) {
+            groupedExpenses[monthYear] = { expenses: [], total: 0 };
+        }
+
+        groupedExpenses[monthYear].expenses.push(expense);
+        groupedExpenses[monthYear].total += expense.amount;
+    });
+
+    const sortedGroupedExpenses = Object.entries(groupedExpenses)
+        .sort((a, b) => {
+            const [monthYearB, monthYearA] = [b[0].split(' '), a[0].split(' ')];
+            const yearA = parseInt(monthYearA[1], 10);
+            const yearB = parseInt(monthYearB[1], 10);
+            const monthA = new Date(Date.parse(`${monthYearA[0]} 1, ${yearA}`)).getMonth();
+            const monthB = new Date(Date.parse(`${monthYearB[0]} 1, ${yearB}`)).getMonth();
+            return yearB - yearA || monthB - monthA;
+        });
+
+    return Object.fromEntries(sortedGroupedExpenses);
+};
 
 export default function AllExpensesPage() {
     const [expenses, setExpenses] = useState([]);
@@ -12,21 +44,9 @@ export default function AllExpensesPage() {
         date: ''
     });
     const [selectedSortOption, setSelectedSortOption] = useState('date');
-    const [selectedOrderOption, setSelectedOrderOption] = useState('asc');
 
-    const sortByDate = (a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-        return selectedOrderOption === 'asc' ? dateA - dateB : dateB - dateA;
-    };
-
-    const sortByCategory = (a, b) => {
-        const categoryA = a.category.toLowerCase();
-        const categoryB = b.category.toLowerCase();
-        if (categoryA < categoryB) return selectedOrderOption === 'asc' ? -1 : 1;
-        if (categoryA > categoryB) return selectedOrderOption === 'asc' ? 1 : -1;
-        return 0;
-    };
+    const sortByDate = (a, b) => new Date(b.date) - new Date(a.date);
+    const sortByCategory = (a, b) => b.category.localeCompare(a.category);
 
     useEffect(() => {
         const loadExpenses = async () => {
@@ -35,7 +55,7 @@ export default function AllExpensesPage() {
             setExpenses(sortedData);
         };
         loadExpenses();
-    }, [selectedSortOption, selectedOrderOption]);
+    }, [selectedSortOption]);
 
     const handleDelete = async (expenseId) => {
         await deleteExpense(expenseId);
@@ -49,13 +69,10 @@ export default function AllExpensesPage() {
             subCategory: expense.subCategory,
             amount: expense.amount,
             description: expense.description,
-            date: expense.date.split('T')[0] // adjust the date format if necessary
+            date: expense.date.split('T')[0]
         });
     };
 
-    const handleCancel = () => {
-        setEditExpenseId(null);
-    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -67,16 +84,21 @@ export default function AllExpensesPage() {
 
     const handleUpdate = async (event) => {
         event.preventDefault();
-        await updateExpense(editExpenseId, editFormData);
-        const updatedExpenses = expenses.map(expense =>
-            expense._id === editExpenseId ? { ...expense, ...editFormData } : expense
-        );
-        setExpenses(updatedExpenses);
-        setEditExpenseId(null);
+        try {
+            const updatedExpenseData = { ...editFormData };
+            updatedExpenseData.date = new Date(editFormData.date + 'T00:00:00').toISOString(); // Ensure the date format is ISO
+    
+            await updateExpense(editExpenseId, updatedExpenseData);
+            const updatedExpenses = await fetchExpenses();
+            const sortedUpdatedExpenses = updatedExpenses.sort(selectedSortOption === 'date' ? sortByDate : sortByCategory); // Sort expenses after update
+            setExpenses(sortedUpdatedExpenses);
+            setEditExpenseId(null);
+        } catch (error) {
+            console.error('Failed to update expense:', error.message);
+        }
     };
 
     return (
-
         <div>
             <h1>All Expenses</h1>
             <div>
@@ -84,57 +106,44 @@ export default function AllExpensesPage() {
                     <option value="date">Sort by Date</option>
                     <option value="category">Sort by Category</option>
                 </select>
-                <select value={selectedOrderOption} onChange={(e) => setSelectedOrderOption(e.target.value)}>
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                </select>
             </div>
-            {expenses.map(expense => (
-                <div key={expense._id}>
-                    {editExpenseId === expense._id ? (
-                        <form onSubmit={handleUpdate}>
-                            <input
-                                type="text"
-                                name="category"
-                                value={editFormData.category}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="subCategory"
-                                value={editFormData.subCategory}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="number"
-                                name="amount"
-                                value={editFormData.amount}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="text"
-                                name="description"
-                                value={editFormData.description}
-                                onChange={handleChange}
-                            />
-                            <input
-                                type="date"
-                                name="date"
-                                value={editFormData.date}
-                                onChange={handleChange}
-                            />
-                            <button type="submit">Update</button>
-                            <button type="button" onClick={handleCancel}>Cancel</button>
-                        </form>
-                    ) : (
-                        <p>
-                            <strong>{expense.category} :</strong> {expense.subCategory} - {expense.description} <strong>${expense.amount}</strong> on {new Date(expense.date).toLocaleDateString()}
-                            <button onClick={() => handleEdit(expense)}>Edit</button>
-                            <button onClick={() => handleDelete(expense._id)}>Delete</button>
-                        </p>
-                    )}
-                </div>
-            ))}
-        </div>
-    );
+            {Object.entries(groupExpensesByMonth(expenses)).map(([monthYear, { expenses: monthExpenses, total }]) => (
+            <div key={monthYear}>
+                <h2>{monthYear} - Total: ${total.toFixed(2)}</h2>
+                {monthExpenses.map((expense) => (
+                    <div key={expense._id}>
+                        {editExpenseId === expense._id ? (
+                            <form onSubmit={handleUpdate}>
+                                <select name="category" value={editFormData.category} onChange={handleChange} required>
+                                    <option value="">Select a Category</option>
+                                    {Object.keys(subCategories).map((category) => (
+                                        <option key={category} value={category}>{category}</option>
+                                    ))}
+                                </select>
+                                {editFormData.category && (
+                                    <select name="subCategory" value={editFormData.subCategory} onChange={handleChange} required>
+                                        <option value="">Select a Subcategory</option>
+                                        {subCategories[editFormData.category].map((subCategory, index) => (
+                                            <option key={index} value={subCategory}>{subCategory}</option>
+                                        ))}
+                                    </select>
+                                )}
+                                <input type="number" name="amount" value={editFormData.amount} onChange={handleChange} placeholder="Amount" required />
+                                <input type="text" name="description" value={editFormData.description} onChange={handleChange} placeholder="Description" />
+                                <input type="date" name="date" value={editFormData.date} onChange={handleChange} required />
+                                <button type="submit">Update</button>
+                            </form>
+                        ) : (
+                            <p>
+                                <strong>{expense.category} :</strong> {expense.subCategory} - {expense.description} <strong>${expense.amount}</strong> on {new Date(expense.date).toLocaleDateString()}
+                                <button onClick={() => handleEdit(expense)}>Edit</button>
+                                <button onClick={() => handleDelete(expense._id)}>Delete</button>
+                            </p>
+                        )}
+                    </div>
+                ))}
+            </div>
+        ))}
+    </div>
+);
 }
