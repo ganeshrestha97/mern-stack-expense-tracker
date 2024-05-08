@@ -11,11 +11,8 @@
 
 I have always been terrible at keeping track of money and my expenses. So for this final project I decided to develop an app that would help me keep track of my expenses and hopfully help me improve on my spending habits. 
 
-<div id="App Link" align="center">
+### [Start tracking your expenses](https://react-expense-tracker-8544ae5cd5ba.herokuapp.com/)
 
-### (https://react-expense-tracker-8544ae5cd5ba.herokuapp.com/)
-
-</div>
 
 📝 App Overview
 ============
@@ -53,8 +50,11 @@ Expense Tracker is developed using React, JS, CSS, React Authentication and Bulm
 <img src="./src/components/Logo/8.png" alt="Mid Dev 8" height="auto" width="320">
 <img src="./src/components/Logo/9.png" alt="Mid Dev 9" height="auto" width="320">
 
+💻 Trello Link
+==============
 
 
+### [Trello Board](https://trello.com/b/deDDCTF1/capstone-project)
 
 
 ⏭️ Next Steps
