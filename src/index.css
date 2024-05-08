@@ -1,50 +1,90 @@
-/* CSS Custom Properties */
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css";
+
+
 :root {
   --white: #FFFFFF;
-  --tan-1: #FBF9F6;
-  --tan-2: #E7E2DD;
-  --tan-3: #E2D9D1;
-  --tan-4: #D3C1AE;
-  --orange: #F67F00;
-  --text-light: #968c84;
-  --text-dark: #615954;
+  --tan-1: #F8F8F8;
+  --tan-2: #E8E8E8;
+  --tan-3: #D8D8D8;
+  --tan-4: #78716a;
+  --green: #44ee5d;
+  --text-light: #AAAAAA;
+  --text-dark: #444444;
 }
 
-*, *:before, *:after {
+
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
+
 body {
+  font-family: 'dphangeroo-font';
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--tan-4);
-  padding: 2vmin;
+  background-image: radial-gradient(circle, #9f9e9e 1px, transparent 1px),
+    radial-gradient(circle, #9f9e9e 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: 0 0, 30px 30px;
+  /* padding: 2vmin; */
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  position: relative;
+  overflow: hidden;
+  background-color: var(--tan-1);
+  color: #444444;
+  width: 100%;
 }
 
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./components/Logo/Dollarr.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% auto;
+  opacity: 0.4;
+  z-index: -1;
+  background-attachment: fixed;
+}
+
+@font-face {
+  font-family: 'dphangeroo-font';
+  src: url('./components/Font/Dphangeroo-LY63.ttf') format('woff2');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+h1,
+h2,
+h3 {
+  font-family: 'dphangeroo-font';
+  font-size: larger;
+  color: #444444;
+}
+
+
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: var(--tan-3);
+  padding: 0.5em;
+  border-radius: 0.3em;
 }
 
 #root {
-  height: 100%;
-}
-
-.align-ctr {
-  text-align: center;
-}
-
-.align-rt {
-  text-align: right;
-}
-
-.smaller {
-  font-size: smaller;
+  width: 100%;
+  max-width: 960px;
 }
 
 .flex-ctr-ctr {
@@ -54,100 +94,92 @@ code {
 }
 
 .flex-col {
+  display: flex;
   flex-direction: column;
 }
 
 .flex-j-end {
+  display: flex;
   justify-content: flex-end;
 }
 
 .scroll-y {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .section-heading {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background-color: var(--tan-1);
+  background-color: var(--white);
   color: var(--text-dark);
-  border: .1vmin solid var(--tan-3);
-  border-radius: 1vmin;
-  padding: .6vmin;
-  text-align: center;
-  font-size: 2vmin;
+  border: 1px solid var(--tan-2);
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
 }
 
 .form-container {
-  padding: 3vmin;
-  background-color: var(--tan-1);
-  border: .1vmin solid var(--tan-3);
-  border-radius: 1vmin;
+  background-color: var(--white);
+  padding: 20px;
+  border: 1px solid var(--tan-3);
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 p.error-message {
-  color: var(--orange);
-  text-align: center;
+  color: var(--green);
+  font-weight: bold;
 }
 
 form {
   display: grid;
   grid-template-columns: 1fr 3fr;
-  gap: 1.25vmin;
-  color: var(--text-light);
+  gap: 20px;
+  margin-top: 20px;
 }
 
 label {
-  font-size: 2vmin;
-  display: flex;
   align-items: center;
+  font-weight: 600;
 }
 
-input {
-  padding: 1vmin;
-  font-size: 2vmin;
-  border: .1vmin solid var(--tan-3);
-  border-radius: .5vmin;
-  color: var(--text-dark);
-  background-image: none !important; /* prevent lastpass */
-  outline: none;
+input,
+select {
+  padding: 10px;
+  border: 1px solid var(--tan-3);
+  border-radius: 5px;
+  transition: border-color 0.3s;
 }
 
-input:focus {
-  border-color: var(--orange);
+input:focus,
+select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 8px rgba(68, 238, 93, 0.5);
 }
 
-button, a.button {
-  margin: 1vmin;
-  padding: 1vmin;
-  color: var(--white);
-  background-color: var(--orange);
-  font-size: 2vmin;
-  font-weight: bold;
-  text-decoration: none;
-  text-align: center;
-  border: .1vmin solid var(--tan-2);
-  border-radius: .5vmin;
-  outline: none;
-  cursor: pointer;
+button,
+a.button {
+  background-color: var(--green);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: 'dphangeroo-font';
 }
 
-button.btn-sm {
-  font-size: 1.5vmin;
-  padding: .6vmin .8vmin;
+button:hover,
+a.button:hover {
+  background-color: darken(var(--green));
 }
 
-button.btn-xs {
-  font-size: 1vmin;
-  padding: .4vmin .5vmin;
-}
-
-button:disabled, form:invalid button[type="submit"] {
-  cursor: not-allowed;
-  background-color: var(--tan-4);
+button:disabled,
+form:invalid button[type="submit"] {
+  background-color: var(--tan-2);
+  color: var(--tan-4);
 }
 
 button[type="submit"] {
+  width: 100%;
+  margin-top: 20px;
   grid-column: span 2;
-  margin: 1vmin 0 0;
 }

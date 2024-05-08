@@ -1,0 +1,35 @@
+.AuthPage {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'dphangeroo-font', sans-serif;
+  }
+
+  
+  
+  .AuthPage h3 {
+    cursor: pointer;
+    color: #007bff;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+  }
+
+  .AuthPage h3:hover {
+    color: #0056b3;
+    text-decoration: underline; 
+}
+
+  .logo-image {
+    width: 200px;
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px; 
+}
+
+.AuthPage div {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+  

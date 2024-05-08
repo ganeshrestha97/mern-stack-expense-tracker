@@ -1,6 +1,8 @@
+
 import { useState, useEffect } from 'react';
 import { fetchExpenses, deleteExpense, updateExpense } from '../../utilities/expense-service';
 import { subCategories } from '../../data';
+import './AllExpensesPage.css';
 
 
 const groupExpensesByMonth = (expenses) => {
@@ -87,7 +89,7 @@ export default function AllExpensesPage() {
         try {
             const updatedExpenseData = { ...editFormData };
             updatedExpenseData.date = new Date(editFormData.date + 'T00:00:00').toISOString(); // Ensure the date format is ISO
-    
+
             await updateExpense(editExpenseId, updatedExpenseData);
             const updatedExpenses = await fetchExpenses();
             const sortedUpdatedExpenses = updatedExpenses.sort(selectedSortOption === 'date' ? sortByDate : sortByCategory); // Sort expenses after update
@@ -99,51 +101,59 @@ export default function AllExpensesPage() {
     };
 
     return (
-        <div>
+        <div className="AllExpensesPage">
             <h1>All Expenses</h1>
+            <br />
             <div>
                 <select value={selectedSortOption} onChange={(e) => setSelectedSortOption(e.target.value)}>
                     <option value="date">Sort by Date</option>
                     <option value="category">Sort by Category</option>
                 </select>
             </div>
+            <br />
             {Object.entries(groupExpensesByMonth(expenses)).map(([monthYear, { expenses: monthExpenses, total }]) => (
-            <div key={monthYear}>
-                <h2>{monthYear} - Total: ${total.toFixed(2)}</h2>
-                {monthExpenses.map((expense) => (
-                    <div key={expense._id}>
-                        {editExpenseId === expense._id ? (
-                            <form onSubmit={handleUpdate}>
-                                <select name="category" value={editFormData.category} onChange={handleChange} required>
-                                    <option value="">Select a Category</option>
-                                    {Object.keys(subCategories).map((category) => (
-                                        <option key={category} value={category}>{category}</option>
-                                    ))}
-                                </select>
-                                {editFormData.category && (
-                                    <select name="subCategory" value={editFormData.subCategory} onChange={handleChange} required>
-                                        <option value="">Select a Subcategory</option>
-                                        {subCategories[editFormData.category].map((subCategory, index) => (
-                                            <option key={index} value={subCategory}>{subCategory}</option>
+                <div key={monthYear} className="expense-card">
+                    <h2>{monthYear} - Total: ${total.toFixed(2)}</h2>
+                    {monthExpenses.map((expense) => (
+                        <div key={expense._id} className="expense-item">
+                            {editExpenseId === expense._id ? (
+                                <form onSubmit={handleUpdate}>
+                                    <select name="category" value={editFormData.category} onChange={handleChange} required>
+                                        <option value="">Select a Category</option>
+                                        {Object.keys(subCategories).map((category) => (
+                                            <option key={category} value={category}>{category}</option>
                                         ))}
                                     </select>
-                                )}
-                                <input type="number" name="amount" value={editFormData.amount} onChange={handleChange} placeholder="Amount" required />
-                                <input type="text" name="description" value={editFormData.description} onChange={handleChange} placeholder="Description" />
-                                <input type="date" name="date" value={editFormData.date} onChange={handleChange} required />
-                                <button type="submit">Update</button>
-                            </form>
-                        ) : (
-                            <p>
-                                <strong>{expense.category} :</strong> {expense.subCategory} - {expense.description} <strong>${expense.amount}</strong> on {new Date(expense.date).toLocaleDateString()}
-                                <button onClick={() => handleEdit(expense)}>Edit</button>
-                                <button onClick={() => handleDelete(expense._id)}>Delete</button>
-                            </p>
-                        )}
-                    </div>
-                ))}
-            </div>
-        ))}
-    </div>
-);
+                                    {editFormData.category && (
+                                        <select name="subCategory" value={editFormData.subCategory} onChange={handleChange} required>
+                                            <option value="">Select a Subcategory</option>
+                                            {subCategories[editFormData.category].map((subCategory, index) => (
+                                                <option key={index} value={subCategory}>{subCategory}</option>
+                                            ))}
+                                        </select>
+                                    )}
+                                    <input type="number" name="amount" value={editFormData.amount} onChange={handleChange} placeholder="Amount" required />
+                                    <input type="text" name="description" value={editFormData.description} onChange={handleChange} placeholder="Description" />
+                                    <input type="date" name="date" value={editFormData.date} onChange={handleChange} required />
+                                    <button class="button is-small is-primary" type="submit">Update</button>
+                                </form>
+                            ) : (
+                                <div className='expense-item'>
+                                    <span><strong className='has-text-dark'>{expense.category} :</strong></span>
+                                    <span>{expense.subCategory}</span>
+                                    <span> - {expense.description}</span>
+                                    <span><strong className='has-text-dark'>${expense.amount}</strong></span>
+                                    <span>{new Date(expense.date).toLocaleDateString()}</span>
+                                    <div className='expense-actions'>
+                                        <button className="button is-small is-primary is-outlined" onClick={() => handleEdit(expense)}>Edit</button>
+                                        <button className="button is-small is-danger is-primary is-outlined" onClick={() => handleDelete(expense._id)}>Delete</button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            ))}
+        </div>
+    );
 }

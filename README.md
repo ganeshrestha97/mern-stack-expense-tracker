@@ -1,72 +1,71 @@
-# Getting Started with Create React App
+<div id="header" align="center" alt="banner image">
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<img src="./src/components/Logo/ExpenseTracker.png" alt="ExpenseTrackerLogo" height="auto" width="300">
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+</div>
 
 
+💰 Expense Tracker
+============
+
+
+I have always been terrible at keeping track of money and my expenses. So for this final project I decided to develop an app that would help me keep track of my expenses and hopfully help me improve on my spending habits. 
+
+<div id="App Link" align="center">
+
+### (https://react-expense-tracker-8544ae5cd5ba.herokuapp.com/)
+
+</div>
+
+📝 App Overview
+============
+Expense Tracker is developed using React, JS, CSS, React Authentication and Bulma CSS.
+
+💻 Technologies Used
+==============
+![VSCode](https://img.shields.io/badge/-VS_Code-05122A?style=flat&logo=visualstudio)
+![JavaScript](https://img.shields.io/badge/-JavaScript-05122A?style=flat&logo=javascript)
+![CSS3](https://img.shields.io/badge/-CSS-05122A?style=flat&logo=css3)
+![Trello](https://img.shields.io/badge/-Trello-05122A?style=flat&logo=trello)
+![Heroku](https://img.shields.io/badge/-Heroku-05122A?style=flat&logo=heroku)
+![HTML5](https://img.shields.io/badge/-HTML5-05122A?style=flat&logo=html5)
+![Github](https://img.shields.io/badge/-GitHub-05122A?style=flat&logo=github)
+<a><img alt='Affinity Designer' src='https://img.shields.io/badge/Affinity_Designer-100000?style=flat&logo=Affinity Designer&logoColor=white&labelColor=0077b5&color=0077b5'/></a>
+
+📸 Screenshots
+==============
+### Wireframe
+<img src="./src/components/Logo/wireframe.jpeg" alt="Wireframe" height="auto" width="320">
+
+### ERD
+<img src="./src/components/Logo/erd.png" alt="ERD" height="auto" width="320">
+
+### Mid-Development
+<img src="./src/components/Logo/1.png" alt="Mid Dev 1" height="auto" width="320">
+<img src="./src/components/Logo/2.png" alt="Mid Dev 2" height="auto" width="320">
+<img src="./src/components/Logo/3.png" alt="Mid Dev 3" height="auto" width="320">
+<img src="./src/components/Logo/4.png" alt="Mid Dev 4" height="auto" width="320">
+
+### Deployed
+<img src="./src/components/Logo/5.png" alt="Mid Dev 5" height="auto" width="320">
+<img src="./src/components/Logo/6.png" alt="Mid Dev 6" height="auto" width="320">
+<img src="./src/components/Logo/7.png" alt="Mid Dev 7" height="auto" width="320">
+<img src="./src/components/Logo/8.png" alt="Mid Dev 8" height="auto" width="320">
+<img src="./src/components/Logo/9.png" alt="Mid Dev 9" height="auto" width="320">
+
+
+
+
+
+⏭️ Next Steps
+============
+- [ ] Optimize for different screens (mobiles/tablets).
+- [ ] Ability to search expenses from a search bar.
+- [ ] Ability to connect bank account to better keep track of the money.
+- [ ] Create grapah/pie chart to see a realtime visuals of the expense.
+
+
+Acknowledgments
+============
+
+Special Thanks to Ashley for helping me debug when I was stuck on multiple instances

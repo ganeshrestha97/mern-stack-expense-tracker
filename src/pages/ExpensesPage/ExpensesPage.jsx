@@ -1,7 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchExpenses, addExpense, deleteExpense, updateExpense } from '../../utilities/expense-service';
 import { subCategories } from '../../data';
+import './ExpensesPage.css'
 
 
 export default function ExpensesPage() {
@@ -23,7 +25,7 @@ export default function ExpensesPage() {
             const data = await fetchExpenses(category);
             setExpenses(data);
         };
-    
+
         loadExpenses();
     }, [category]);
 
@@ -46,7 +48,7 @@ export default function ExpensesPage() {
         try {
             const expenseData = { ...newExpense };
             expenseData.date = new Date(newExpense.date + 'T00:00:00').toISOString(); // Convert date to ISO format
-    
+
             if (newExpense.isEditing) {
                 await updateExpense(newExpense.editingId, expenseData);
             } else {
@@ -77,15 +79,10 @@ export default function ExpensesPage() {
     };
 
     return (
-        <div>
+        <div className='ExpensesPage'>
             <h1>Expenses</h1>
             <form onSubmit={handleSubmit}>
-                <select
-                    name="category"
-                    value={newExpense.category}
-                    onChange={handleChange}
-                    required
-                >
+                <select name="category" value={newExpense.category} onChange={handleChange} required>
                     <option value="">Select a Category</option>
                     {Object.keys(subCategories).map((category, index) => (
                         <option key={index} value={category}>{category}</option>
@@ -93,12 +90,7 @@ export default function ExpensesPage() {
                 </select>
 
                 {newExpense.category && (
-                    <select
-                        name="subCategory"
-                        value={newExpense.subCategory}
-                        onChange={handleChange}
-                        required
-                    >
+                    <select name="subCategory" value={newExpense.subCategory} onChange={handleChange} required>
                         <option value="">Select a Subcategory</option>
                         {subCategories[newExpense.category].map((subCategory, index) => (
                             <option key={index} value={subCategory}>{subCategory}</option>
@@ -106,40 +98,26 @@ export default function ExpensesPage() {
                     </select>
                 )}
 
-                <input
-                    type="number"
-                    name="amount"
-                    value={newExpense.amount}
-                    onChange={handleChange}
-                    placeholder="Amount"
-                    required
-                />
-                <input
-                    type="text"
-                    name="description"
-                    value={newExpense.description}
-                    onChange={handleChange}
-                    placeholder="Description"
-                />
-                <input
-                    type="date"
-                    name="date"
-                    value={newExpense.date}
-                    onChange={handleChange}
-                    required
-                />
-                <button type="submit">{newExpense.isEditing ? 'Update' : 'Add Expense'}</button>
+                <input type="number" name="amount" value={newExpense.amount} onChange={handleChange} placeholder="Amount" required />
+                <input type="text" name="description" value={newExpense.description} onChange={handleChange} placeholder="Description" />
+                <input type="date" name="date" value={newExpense.date} onChange={handleChange} required />
+                <button class="button is-small is-primary" type="submit">{newExpense.isEditing ? 'Update' : 'Add Expense'}</button>
             </form>
 
-            {expenses.map(expense => (
-                <div key={expense._id}>
-                    <div>
-                        <strong>{expense.category} :</strong> {expense.subCategory} - {expense.description} <strong>${expense.amount}</strong> on {new Date(expense.date).toLocaleDateString()}
-                        <button onClick={() => handleEdit(expense)}>Edit</button>
-                        <button onClick={() => handleDelete(expense._id)}>Delete</button>
+            <br />
+            <br />
+
+            <div className="expense-card">
+                {expenses.map(expense => (
+                    <div key={expense._id} className="expense-item">
+                        <strong className='has-text-dark'>{expense.category} :</strong> {expense.subCategory} - {expense.description} <strong className='has-text-dark'>${expense.amount}</strong> {new Date(expense.date).toLocaleDateString()}
+                        <div className="expense-actions">
+                            <button class="button is-small is-primary is-outlined" onClick={() => handleEdit(expense)}>Edit</button>
+                            <button class="button is-small is-danger is-outlined" onClick={() => handleDelete(expense._id)}>Delete</button>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 }
