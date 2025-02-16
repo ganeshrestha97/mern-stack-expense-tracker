@@ -62,7 +62,7 @@ Expense Tracker is developed using React, JS, CSS, React Authentication and Bulm
 - [ ] Optimize for different screens (mobiles/tablets).
 - [ ] Ability to search expenses from a search bar.
 - [ ] Ability to connect bank account to better keep track of the money.
-- [ ] Create grapah/pie chart to see a realtime visuals of the expense.
+- [ ] Create graph/pie chart to see a realtime visuals of the expense.
 
 
 Acknowledgments
